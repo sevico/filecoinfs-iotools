@@ -18,7 +18,7 @@ Names:
   SSDDirName: cache #SSD 文件夹名称
   NameFile: names # 存储生成的文件名
 
-FSPath: /home/shiweikang/fakeBeeGFS #待测试文件系统的挂载路径
+FSPath: /home/shiweikang/FS #待测试文件系统的挂载路径
 SubPath: true #是否开启每个节点一个子文件夹的模式
 CleanUp: true #测试前是否删除上一次生成的文件
 DebugLog: false #是否输出详细log
