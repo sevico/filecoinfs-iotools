@@ -1,0 +1,27 @@
+Sizes:
+  HDD: 1   #HDD文件大小 GB
+  SSD: 9.8    #SSD 文件大小 MB
+  RandomRead: 4096 #随机读HDD文件大小 B
+  HDDChunk: 100 #生成 HDD 文件时每次随机写入大小 MB
+  SSDChunk: 4 #生成 SSD 文件时每次随机写入大小 KB
+
+Times:
+  RandomRead: 100 #随机读 HDD 文件次数
+  GenTimes: 8  #SSD文件生成数量
+  Threshold: 10 #随机挑选的 HDD 文件数量
+  NameRountines: 20 #生成文件名的 goroutine 个数
+  GenFileRoutines: 20 #给文件写随机内容的 goroutine 数量
+  Samples: 500 #tachymeter sample个数
+
+Names:
+  HDDDirName: sealed #HDD 文件夹名称
+  SSDDirName: cache #SSD 文件夹名称
+  NameFile: names # 存储生成的文件名
+
+FSPath: /home/shiweikang/fakeBeeGFS #待测试文件系统的挂载路径
+SubPath: true #是否开启每个节点一个子文件夹的模式
+CleanUp: true #测试前是否删除上一次生成的文件
+DebugLog: false #是否输出详细log
+StaticResidue: false #是否统计文件多余部分写入延迟
+
+
