@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"infcs/filecoinfs-iotools/model"
-	"infcs/filecoinfs-iotools/statics"
 	"io/ioutil"
 	"math/rand"
 	"os"
@@ -12,6 +10,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/sevico/filecoinfs-iotools/model"
+	"github.com/sevico/filecoinfs-iotools/statics"
 
 	logs "log"
 

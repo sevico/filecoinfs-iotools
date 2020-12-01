@@ -3,14 +3,15 @@ package statics
 import (
 	"context"
 	"fmt"
-	"infcs/filecoinfs-iotools/model"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/sevico/filecoinfs-iotools/model"
+
 	logs "log"
 
-	"infcs/filecoinfs-iotools/util"
+	"github.com/sevico/filecoinfs-iotools/util"
 
 	"github.com/sevico/tachymeter"
 	"github.com/thecodeteam/goodbye"

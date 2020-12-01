@@ -1,9 +1,10 @@
 package statics
 
 import (
-	"infcs/filecoinfs-iotools/model"
 	"os"
 	"time"
+
+	"github.com/sevico/filecoinfs-iotools/model"
 )
 
 func CloseHDD(file *os.File, Content string) {
