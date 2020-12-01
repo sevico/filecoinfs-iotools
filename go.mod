@@ -1,4 +1,4 @@
-module infcs/filecoinfs-iotools
+module github.com/sevico/filecoinfs-iotools
 
 go 1.13
 
