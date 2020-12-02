@@ -1,8 +1,11 @@
 # 1. 工具说明
 
 本工具的作用是模拟真实环境的 IO 负载，为后续的优化提供检验和方向指导。
+
 源码地址:https://github.com/sevico/filecoinfs-iotools
+
 编译好的二进制文件(amd64,linux):https://github.com/sevico/filecoinfs-iotools/releases/download/1.0/filetools.zip
+
 # 2. 构建过程
 和其他go 项目一样构建即可
 首先将源码 clone 下来
