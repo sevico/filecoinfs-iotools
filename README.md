@@ -1,7 +1,9 @@
 # 1. 工具说明
 
 本工具的作用是模拟真实环境的 IO 负载，为后续的优化提供检验和方向指导。模拟的负载原型如下图所示:
+
 ![test_model](img/test_model.png)
+
 上图中的大部分的数字参数可在运行前在 yaml 文件中进行配置
 源码地址:https://github.com/sevico/filecoinfs-iotools
 编译好的二进制文件(amd64,linux):https://github.com/sevico/filecoinfs-iotools/releases/download/1.0/filetools.zip
