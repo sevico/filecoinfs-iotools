@@ -7,7 +7,7 @@ Sizes:
 
 Times:
   RandomRead: 100 #随机读 HDD 文件次数
-  GenTimes: 8  #SSD文件生成数量
+  SSDFileGen: 8  #SSD文件生成数量
   Threshold: 10 #随机挑选的 HDD 文件数量
   NameRountines: 20 #生成文件名的 goroutine 个数
   GenFileRoutines: 20 #给文件写随机内容的 goroutine 数量

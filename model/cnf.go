@@ -9,7 +9,7 @@ type SizeArgs struct {
 }
 type Times struct {
 	RandomRead      int `yaml:"RandomRead"`
-	GenTimes        int `yaml:"GenTimes"`
+	SSDFileGen      int `yaml:"SSDFileGen"`
 	Threshold       int `yaml:"Threshold"`
 	NameRountines   int `yaml:"NameRountines"`
 	GenFileRoutines int `yaml:"GenFileRoutines"`

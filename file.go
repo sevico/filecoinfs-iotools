@@ -81,10 +81,10 @@ func genFile() {
 		func() {
 			fileName := <-fileNameChan
 
-			var SSDDirPaths = make([]string, cnf.TimeArgs.GenTimes)
+			var SSDDirPaths = make([]string, cnf.TimeArgs.SSDFileGen)
 			HDDFilePath := path.Join(hddDirPath, fileName)
 			// fmt.Println(HDDFilePath)
-			for i := 0; i < cnf.TimeArgs.GenTimes; i++ {
+			for i := 0; i < cnf.TimeArgs.SSDFileGen; i++ {
 				SSDDirPaths[i] = path.Join(ssdDirPath, fileName+"_"+strconv.Itoa(i+1))
 			}
 
@@ -278,7 +278,7 @@ func recoverGenStatus(dir string) {
 			continue
 		}
 		ssdEncountErr := false
-		for i := 0; i < cnf.TimeArgs.GenTimes; i++ {
+		for i := 0; i < cnf.TimeArgs.SSDFileGen; i++ {
 
 			SSDFilePath := path.Join(dir, cnf.NameArgs.SSDDirName, item.Name()+"_"+strconv.Itoa(i+1))
 			ssdFi, err := os.Stat(SSDFilePath)

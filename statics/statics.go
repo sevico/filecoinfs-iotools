@@ -91,6 +91,7 @@ func WriteToLog(debug bool, sampleCount int) {
 		logs.Fatalf("open file %v err %v", fileName, err)
 		return
 	}
+	defer file.Close()
 	// opCount := make(map[string]int)
 
 	for logEntry := range OpLogToFileChan {
