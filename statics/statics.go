@@ -23,7 +23,7 @@ func formatString(l []model.OpLog) string {
 	sRes := ""
 
 	for i := range l {
-		temp := fmt.Sprintf("%v|%v|%v|%v|%v\n", l[i].Ts.Format(time.RFC3339), l[i].OP, l[i].Object, l[i].Content, strconv.Itoa(int(l[i].Duration.Microseconds()))+"ms")
+		temp := fmt.Sprintf("%v|%v|%v|%v|%v\n", l[i].Ts.Format(time.RFC3339), l[i].OP, l[i].Object, l[i].Content, strconv.Itoa(int(l[i].Duration.Microseconds()))+"μs")
 		sRes += temp
 	}
 	return sRes
