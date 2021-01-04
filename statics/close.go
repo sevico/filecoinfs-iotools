@@ -1,6 +1,7 @@
 package statics
 
 import (
+	logs "log"
 	"os"
 	"time"
 
@@ -10,7 +11,10 @@ import (
 func CloseHDD(file *os.File, Content string) {
 
 	t1 := time.Now()
-	file.Close()
+	err := file.Close()
+	if err != nil {
+		logs.Printf("rand read fourKBBytes err %v", err)
+	}
 	t2 := time.Now()
 
 	temp := model.OpLog{
@@ -26,7 +30,11 @@ func CloseHDD(file *os.File, Content string) {
 func CloseSSD(file *os.File, Content string) {
 
 	t1 := time.Now()
-	file.Close()
+	err := file.Close()
+
+	if err != nil {
+		logs.Printf("CloseSSD file %v err %v", file, err)
+	}
 	t2 := time.Now()
 
 	temp := model.OpLog{

@@ -1,6 +1,7 @@
 package statics
 
 import (
+	logs "log"
 	"os"
 	"time"
 
@@ -10,7 +11,10 @@ import (
 //WriteHDDFileWithStatics 带统计的写
 func WriteHDDFileWithStatics(file *os.File, content []byte) {
 	start := time.Now()
-	file.Write(content)
+	_, err := file.Write(content)
+	if err != nil {
+		logs.Printf("HDDFile Write err %v", err)
+	}
 	end := time.Now()
 	contentSizeHuman := humanize.Bytes(uint64(len(content)))
 
@@ -21,7 +25,10 @@ func WriteHDDFileWithStatics(file *os.File, content []byte) {
 //WriteSSDFileWithStatics 带统计的写
 func WriteSSDFileWithStatics(file *os.File, content []byte) {
 	start := time.Now()
-	file.Write(content)
+	_, err := file.Write(content)
+	if err != nil {
+		logs.Printf("WriteSSDFileWithStatics error %v", err)
+	}
 	end := time.Now()
 
 	contentSizeHuman := humanize.IBytes(uint64(len(content)))

@@ -52,8 +52,12 @@ func UUIDCheckFunc(id string) (bool, error) {
 func genFileName() string {
 	for {
 		var id string
+		var err error
 		for {
-			id, _ = uuid.GenerateUUID()
+			id, err = uuid.GenerateUUID()
+			if err != nil {
+				logs.Printf("GenerateUUID err %v", err)
+			}
 			success, _ := UUIDCheckFunc(id)
 			if success {
 				break
@@ -76,7 +80,13 @@ func genFile() {
 	hundredMBytes := make([]byte, HDDChunkSize)
 	fourKBBytes := make([]byte, SSDChunkSize)
 	_, err := rand.Read(hundredMBytes)
+	if err != nil {
+		logs.Printf("rand read hundredMBytes err %v", err)
+	}
 	_, err = rand.Read(fourKBBytes)
+	if err != nil {
+		logs.Printf("rand read fourKBBytes err %v", err)
+	}
 	for {
 		func() {
 			fileName := <-fileNameChan
@@ -88,7 +98,10 @@ func genFile() {
 				SSDDirPaths[i] = path.Join(ssdDirPath, fileName+"_"+strconv.Itoa(i+1))
 			}
 
-			hddFile, _ := os.OpenFile(HDDFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+			hddFile, err := os.OpenFile(HDDFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+			if err != nil {
+				logs.Printf("os.OpenFile %s err %v", HDDFilePath, err)
+			}
 			defer statics.CloseHDD(hddFile, fmt.Sprintf("%.2f", cnf.SizeArgs.HDD)+"GB")
 
 			for i := 0; i < int(int(cnf.SizeArgs.HDD*1024*1024*1024)/HDDChunkSize); i++ {
@@ -102,12 +115,17 @@ func genFile() {
 			if cnf.StaticResidue {
 				statics.WriteHDDFileWithStatics(hddFile, hundredMBytes[:residue])
 			} else {
-				hddFile.Write(hundredMBytes[:residue])
+				_, err := hddFile.Write(hundredMBytes[:residue])
+				if err != nil {
+					logs.Printf("hddFile Write err %v", err)
+				}
 			}
 
 			for i := 0; i < len(SSDDirPaths); i++ {
-				ssdFile, _ := os.OpenFile(SSDDirPaths[i], os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
-
+				ssdFile, err := os.OpenFile(SSDDirPaths[i], os.O_APPEND|os.O_CREATE|os.O_WRONLY, os.ModePerm)
+				if err != nil {
+					logs.Printf("OpenFile ssdFile Write err %v", err)
+				}
 				defer statics.CloseSSD(ssdFile, fmt.Sprintf("%.2f", cnf.SizeArgs.SSD)+"MB")
 				for j := 0; j < int(int(cnf.SizeArgs.SSD*1024*1024)/SSDChunkSize); j++ {
 
@@ -120,7 +138,10 @@ func genFile() {
 				if cnf.StaticResidue {
 					statics.WriteSSDFileWithStatics(ssdFile, fourKBBytes[:residue])
 				} else {
-					ssdFile.Write(fourKBBytes[:residue])
+					_, err := ssdFile.Write(fourKBBytes[:residue])
+					if err != nil {
+						logs.Printf("ssdFile.Write err %v", err)
+					}
 				}
 				// util.WriteSSDFileWithStatics(ssdFile, fourKBBytes[:residue])
 			}
@@ -216,10 +237,12 @@ func Random4KRead(fileName model.FileName, wg *sync.WaitGroup) {
 	}
 
 	f, err := os.Open(filePath)
-	defer f.Close()
 	if err != nil {
 		logs.Fatalf("open file %v err %v", filePath, err)
+		return
 	}
+	defer f.Close()
+
 	stat, err := f.Stat()
 	if err != nil {
 		logs.Fatalf("stat file %v err %v", filePath, err)
@@ -231,13 +254,13 @@ func Random4KRead(fileName model.FileName, wg *sync.WaitGroup) {
 	readBuf := make([]byte, readSize)
 	t1 := time.Now()
 	_, err = f.ReadAt(readBuf, int64(offset))
+	if err != nil {
+		logs.Fatalf("read offset %v length %v error %v", offset, readSize, err)
+	}
 	dur := time.Since(t1)
 	content := humanize.IBytes(uint64(readSize))
 
 	statics.FinishRead(f, content, t1, dur)
-	if err != nil {
-		logs.Fatalf("read offset %v length %v error %v", offset, readSize, err)
-	}
 
 }
 func RecoverGenStatus() {
