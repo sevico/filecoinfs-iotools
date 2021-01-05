@@ -12,6 +12,9 @@ Times:
   NameRountines: 20 #生成文件名的 goroutine 个数
   GenFileRoutines: 20 #给文件写随机内容的 goroutine 数量
   Samples: 500 #tachymeter sample个数
+  ReadRoutines: 10 #并行读取文件的线程数量
+  TotalReadTimes: 100 #每次读取时的总读取次数
+  ReadTimes: 10 #每个线程读取文件的次数
 
 Names:
   HDDDirName: sealed #HDD 文件夹名称

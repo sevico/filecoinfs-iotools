@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/sevico/filecoinfs-iotools/model"
@@ -235,7 +236,9 @@ func Random4KRead(fileName model.FileName, wg *sync.WaitGroup) {
 	} else {
 		filePath = path.Join(cnf.FSPath, cnf.NameArgs.HDDDirName, fileName.DataFile)
 	}
-
+	totalReadTimes := int64(cnf.TimeArgs.TotalReadTimes)
+	readRoutines := int64(cnf.TimeArgs.ReadRoutines)
+	readTimes := int64(cnf.TimeArgs.ReadTimes)
 	f, err := os.Open(filePath)
 	if err != nil {
 		logs.Fatalf("open file %v err %v", filePath, err)
@@ -250,6 +253,34 @@ func Random4KRead(fileName model.FileName, wg *sync.WaitGroup) {
 	}
 	fileSize := stat.Size()
 	readSize := cnf.SizeArgs.RandomRead
+
+	for atomic.LoadInt64(&totalReadTimes) > 0 {
+		var wg sync.WaitGroup
+		for i := 0; i < int(readRoutines); i++ {
+			if atomic.LoadInt64(&totalReadTimes) > 0 {
+				wg.Add(1)
+				go func() {
+					for i := 0; i < int(readTimes); i++ {
+						if atomic.LoadInt64(&totalReadTimes) > 0 {
+							offset := rand.Intn(int(fileSize) - readSize)
+							readBuf := make([]byte, readSize)
+							t1 := time.Now()
+							_, err = f.ReadAt(readBuf, int64(offset))
+							if err != nil {
+								logs.Fatalf("read offset %v length %v error %v", offset, readSize, err)
+							}
+							dur := time.Since(t1)
+							content := humanize.IBytes(uint64(readSize))
+							statics.FinishRead(f, content, t1, dur)
+							atomic.AddInt64(&totalReadTimes, -1)
+						}
+					}
+					wg.Done()
+				}()
+			}
+			wg.Wait()
+		}
+	}
 	offset := rand.Intn(int(fileSize) - readSize)
 	readBuf := make([]byte, readSize)
 	t1 := time.Now()
@@ -263,6 +294,7 @@ func Random4KRead(fileName model.FileName, wg *sync.WaitGroup) {
 	statics.FinishRead(f, content, t1, dur)
 
 }
+
 func RecoverGenStatus() {
 	if cnf.SubPathMode {
 		fs, err := ioutil.ReadDir(cnf.FSPath)

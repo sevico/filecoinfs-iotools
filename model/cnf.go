@@ -14,6 +14,10 @@ type Times struct {
 	NameRountines   int `yaml:"NameRountines"`
 	GenFileRoutines int `yaml:"GenFileRoutines"`
 	Samples         int `yaml:"Samples"`
+
+	ReadRoutines   int `yaml:"ReadRoutines"`
+	TotalReadTimes int `yaml:"TotalReadTimes"`
+	ReadTimes      int `yaml:"ReadTimes"`
 }
 type Names struct {
 	HDDDirName string `yaml:"HDDDirName"`
